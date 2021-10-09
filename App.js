@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Text, View, Dimensions, ScrollView, Modal, TouchableOpacity } from 'react-native';
 import LottieView from 'lottie-react-native';
 import VarelaFont from './assets/fonts/VarelaRound-Regular.ttf'
 import { Ionicons } from '@expo/vector-icons';
 
 import { useFonts } from '@expo-google-fonts/inter';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity as TC } from 'react-native-gesture-handler';
 
 
 const width = Dimensions.get("window").width;
@@ -17,8 +17,31 @@ export default function App() {
     VarelaFont
   });
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <ScrollView contentContainerStyle={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Hellow, how are you? This app is amazing, you know why? {'\n\n'}Because we can verify which infrared waves are around you and we configure it for you with one just click</Text>
+
+              <TouchableOpacity
+                style={{ width:200, backgroundColor: '#0ecf82',  borderRadius: 20, padding: 10}}
+                onPress={() => {
+                  setModalVisible(false);
+                }}>
+                <Text style={styles.textStyle}>Close Pop-up</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </Modal>
         <StatusBar style="auto" />
         <View style={{flex:1, alignItems:'flex-start', marginTop:height/5, flexDirection:'row'}}>
           <Text style={styles.title}>Control</Text>
@@ -31,14 +54,14 @@ export default function App() {
         </View>
 
         <View style={{flexDirection:"row"}}>
-          <TouchableOpacity onPress={() => alert('Feature not finished yet')} style={styles.customButton}>
+          <TC onPress={() => alert('Feature not finished yet')} style={styles.customButton}>
             <Ionicons name="radio-outline" size={32} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity style={{marginLeft:10, marginTop:10, elevation:5, backgroundColor:'#171010', width: width/7, padding:5, alignItems:'center', justifyContent:'center', borderRadius:15}}>
+          </TC>
+          <TC onPress={() => setModalVisible(true)} style={{marginLeft:10, marginTop:10, elevation:5, backgroundColor:'#171010', width: width/7, padding:5, alignItems:'center', justifyContent:'center', borderRadius:15}}>
             <Ionicons name="information-circle-outline" size={24} color="white" />
-          </TouchableOpacity>
+          </TC>
         </View>
-    </ScrollView>
+    </View>
   );
 }
 
@@ -72,5 +95,44 @@ const styles = StyleSheet.create({
     justifyContent:'center', 
     borderRadius:15, 
     marginBottom: height/28, marginLeft: width/6
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  openButton: {
+    backgroundColor: '#0ecf82',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize:17,
+    fontWeight: 'bold',
+    fontFamily: 'VarelaFont'
+  },
 });
